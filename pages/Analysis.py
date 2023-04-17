@@ -139,6 +139,7 @@ def numerical_variable_viz(num_var_name):
     st.pyplot(f)
 
 with st.expander("Analysis of Categorical Features and Numerical Features against Attrition Rate"):
+    st.markdown("<br/>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([2,1,2])
     with col1:
         st.markdown("<h6 style='text-align: center; color: Black;'>Categorical Features vs Attrition Rate</h6>", unsafe_allow_html=True)
