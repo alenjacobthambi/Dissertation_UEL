@@ -10,43 +10,49 @@ model = pickle.load (open ('model.pkl','rb'))
 
 model_features = model.feature_names_in_
 
-st.markdown("<h3 style='text-align: center; color: white;'>Employee Attrition Prediction</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: black;'>Employee Attrition Prediction</h3>", unsafe_allow_html=True)
 with st.form("attrition_form"):
-    col1, col2, col3, col4, col5 = st.columns(5)
-    with col1:
-        Age = st.text_input("Age",value=29)
-        BusinessTravel = st.selectbox('Business Travel',('Rarely', 'Frequently', 'Non-Travel'))
-        DailyRate = st.text_input("DailyRate",value=1102)
-        Department = st.text_input("Department",value="Sales")
-        DistanceFromHome = st.text_input("DistanceFromHome",value=1)
-        Education = st.text_input("Education",value=2)
+    with st.expander("ℹ️ Please provide some Personal information about the Employee"):
+        col1, col2 = st.columns(2)
+        with col1:
+            Age = st.slider("Age", min_value=18, max_value=70, value=29, step=1)
+            Gender = st.selectbox('Gender',('Male', 'Female'))
+            MaritalStatus = st.selectbox('Marital Status',('Single', 'Married', 'Divorced'))
+            DistanceFromHome = st.slider("DistanceFromHome", min_value=1, max_value=100, value=5, step=1)
+            TotalWorkingYears = st.slider("TotalWorkingYears", min_value=0, max_value=20, value=4, step=1)
+            NumCompaniesWorked = st.slider("NumCompaniesWorked", min_value=1, max_value=15, value=3, step=1)
+        with col2:
+            OverTime = st.selectbox('OverTime',('Yes', 'No'))
+            BusinessTravel = st.selectbox('Business Travel',('Rarely', 'Frequently', 'Non-Travel'))
+            Department = st.selectbox('Department',('Research & Development', 'Sales', 'Other'))
+            Education = st.selectbox('Education',('Below College', 'College', 'Bachelor', 'Master', 'Doctor'))
+            YearsAtCompany = st.slider("YearsAtCompany", min_value=1, max_value=20, value=4, step=1)
+            EducationField = st.selectbox('EducationField',('Life Sciences', 'Medical', 'Marketing', 'Technical Degree', 'Human Resources', 'Other'))
+    
+    with st.expander("ℹ️ Please provide some Job related information about the Employee"):
+        col1, col2 = st.columns(2)
+        with col1:
+            JobLevel = st.slider("JobLevel", min_value=2, max_value=5, value=1, step=1) 
+            HourlyRate = st.text_input("HourlyRate (£)",value=94)
+            DailyRate = st.text_input("DailyRate (£)",value=1102)
+            MonthlyIncome = st.text_input("MonthlyIncome (£)",value=5993)
+            YearsInCurrentRole = st.slider("YearsInCurrentRole", min_value=1, max_value=20, value=2, step=1)
+            YearsWithCurrManager = st.slider("YearsWithCurrManager", min_value=1, max_value=20, value=4, step=1) 
+            YearsSinceLastPromotion = st.slider("YearsSinceLastPromotion", min_value=1, max_value=20, value=2, step=1)
+            TrainingTimesLastYear = st.slider("TrainingTimesLastYear", min_value=1, max_value=20, value=3, step=1)
+        with col2:
+            JobRole = st.selectbox('JobRole',('Sales Executive', 'Research Scientist', 'Laboratory Technician', 'Manufacturing Director', 'Healthcare Representative'))
+            PerformanceRating = st.slider("PerformanceRating", min_value=1, max_value=4, value=2, step=1)
+            EnvironmentSatisfaction = st.slider("Environment Satisfaction", min_value=1, max_value=4, value=2, step=1)
+            JobInvolvement = st.slider("Job Involvement", min_value=1, max_value=4, value=3, step=1)
+            JobSatisfaction = st.slider("Job Satisfaction", min_value=1, max_value=4, value=4, step=1)
+            RelationshipSatisfaction = st.slider("Relationship Satisfaction", min_value=1, max_value=4, value=1, step=1)
+            WorkLifeBalance = st.slider("Work-Life Balance", min_value=1, max_value=4, value=1, step=1)
+            StockOptionLevel = st.slider("StockOptionLevel", min_value=1, max_value=1, value=4, step=1)      
+    col1, col2, col3= st.columns(3) 
     with col2:
-        EducationField = st.text_input("EducationField",value="Life Sciences")
-        EnvironmentSatisfaction = st.text_input("EnvironmentSatisfaction",value=2)
-        Gender = st.selectbox('Gender',('Male', 'Female'))
-        HourlyRate = st.text_input("HourlyRate",value=94)
-        JobInvolvement = st.text_input("JobInvolvement",value=3)
-        JobLevel = st.text_input("JobLevel",value=2)
-    with col3:
-        JobRole = st.text_input("JobRole",value="Sales Executive")
-        JobSatisfaction = st.text_input("JobSatisfaction",value=4)
-        MaritalStatus = st.selectbox('Marital Status',('Single', 'Married', 'Divorced'))
-        MonthlyIncome = st.text_input("MonthlyIncome",value=5993)
-        NumCompaniesWorked = st.text_input("NumCompaniesWorked",value=8)
-        OverTime = st.text_input("OverTime",value="Yes")
         submitted = st.form_submit_button("Predict")
-    with col4:
-        PerformanceRating = st.text_input("PerformanceRating",value=3)
-        RelationshipSatisfaction = st.text_input("RelationshipSatisfaction",value=1)
-        StockOptionLevel = st.text_input("StockOptionLevel",value=0)
-        TotalWorkingYears = st.text_input("TotalWorkingYears",value=8)
-        TrainingTimesLastYear = st.text_input("TrainingTimesLastYear",value=0)
-    with col5:
-        YearsAtCompany = st.text_input("YearsAtCompany",value=6)
-        YearsInCurrentRole = st.text_input("YearsInCurrentRole",value=4)
-        YearsSinceLastPromotion = st.text_input("YearsSinceLastPromotion",value=0)
-        YearsWithCurrManager = st.text_input("YearsWithCurrManager",value=5)
-        WorkLifeBalance = st.text_input("WorkLifeBalance",value=1)
+
     
     dict = {
         'Age': int (Age),
@@ -165,25 +171,25 @@ with st.form("attrition_form"):
     df.drop ('BusinessTravel',axis=1,inplace=True)
 
     # Education
-    if Education == 1:
+    if Education == 'Below College':
         df['Education_1'] = 1
         df['Education_2'] = 0
         df['Education_3'] = 0
         df['Education_4'] = 0
         df['Education_5'] = 0
-    elif Education == 2:
+    elif Education == 'College':
         df['Education_1'] = 0
         df['Education_2'] = 1
         df['Education_3'] = 0
         df['Education_4'] = 0
         df['Education_5'] = 0
-    elif Education == 3:
+    elif Education == 'Bachelor':
         df['Education_1'] = 0
         df['Education_2'] = 0
         df['Education_3'] = 1
         df['Education_4'] = 0
         df['Education_5'] = 0
-    elif Education == 4:
+    elif Education == 'Master':
         df['Education_1'] = 0
         df['Education_2'] = 0
         df['Education_3'] = 0
