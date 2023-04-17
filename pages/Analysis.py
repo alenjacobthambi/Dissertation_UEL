@@ -1,12 +1,13 @@
 import pickle
 import streamlit as st
-st.set_page_config(page_title="Prediction", page_icon="📈",layout="wide")
+st.set_page_config(page_title="Analysis", page_icon="📈",layout="wide")
 
 import math, time, random, datetime
 import pandas as pd
 import numpy as np
 from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
+from streamlit.components.v1 import html
 import matplotlib.pyplot as plt
 import seaborn as sns
 plt.style.use('seaborn-v0_8-whitegrid')
@@ -37,29 +38,80 @@ df.head()
 
 df.drop(['EmployeeNumber','Over18','StandardHours','EmployeeCount'],axis=1,inplace=True)
 
-with st.expander("Dataset Overview and Feature Correlations"):
-    # Define function to generate report
-    def generate_report():
-        report = ProfileReport(df)
-        st_profile_report(report)
-    # Add button to generate report
-    if st.button("Generate Report"):
-        generate_report()
+with st.expander("Dataset Overview"):
+    tab1, tab2 = st.tabs(["Overview", "Detailed Report"])
+    with tab1:
+        # Data source and description
+        st.markdown("<h6 style='text-align: left; color: Black;'>Data Source</h6>", unsafe_allow_html=True)
+        st.write("<p style='text-align: justify; color: Black;'>The data used in my analysis on employee attrition was obtained from Kaggle, a well-known platform for data science competitions, datasets, and more. Kaggle offers a wide range of datasets on various topics, and this particular dataset provides information on employee attrition in a company. With this data, I aim to analyze the factors that contribute to employee attrition and build a model to predict which employees are most likely to leave the company. For more information about Kaggle and the resources it offers for data science enthusiasts, visit https://www.kaggle.com/.</p><br/>", unsafe_allow_html=True)
+        # Basic statistics
+        st.markdown("<h6 style='text-align: left; color: Black;'>About Data and Features</h6>", unsafe_allow_html=True)
+        col1, col2 = st.columns([1,1])
+        with col1:
+            num_obs = df.shape[0]
+            num_feat = df.shape[1]
+            missing_cells = 0
+            missing_cells_percent = 0.0
+            duplicates = 0
+            duplicates_percent = 0.0
+            num_vars = 14
+            bool_vars = 2
+            cat_vars = 15
+            st.text("Number of Observations:\t\t\t{}\n"
+                    "Number of Features:\t\t\t{}\n"
+                    "Missing Cells:\t\t\t\t{}\n"
+                    "Missing Cells(%):\t\t\t{}\n"
+                    "Duplicate Rows:\t\t\t\t{}\n"
+                    "Duplicate Rows(%):\t\t\t{}\n"
+                    "Numeric Variables:\t\t\t{}\n"
+                    "Boolean Variables:\t\t\t{}\n"
+                    "Categorical Variables:\t\t\t{}\n".format(num_obs, num_feat, missing_cells, 
+                                                               missing_cells_percent, duplicates, 
+                                                               duplicates_percent, num_vars, 
+                                                               bool_vars, cat_vars))
 
+        st.write("<p style='text-align: justify; color: Black;'>This is a summary of the dataset we will be analyzing. The dataset contains 1470 observations and 31 features, representing various aspects of employee performance and demographics. There are no missing cells or duplicate rows in the dataset, indicating that the data is clean and ready for analysis. The dataset includes 14 numeric variables, such as age, monthly income, and years at company, which can be analyzed using statistical methods. Additionally, there are 2 boolean variables, such as whether the employee has overtime pay or not, and 15 categorical variables, such as job role and education level, which will require encoding before they can be used in machine learning models. This summary provides a good overview of the data we will be working with, and will help guide our analysis and modeling.</p>", unsafe_allow_html=True)
+        
+        st.markdown("<br/>", unsafe_allow_html=True)
+        # Preview of data
+        st.markdown("<h6 style='text-align: left; color: Black;'>Preview of Data</h6>", unsafe_allow_html=True)
+        st.write(df.head())
+        
+        col_info = df.dtypes.rename_axis("Feature Name").reset_index(name="Data Type")
+        col_info_list = [col_info.columns.tolist()] + col_info.to_dict("records")
+        st.markdown("<p style='text-align: justify; color: black; font-size: 15px;'>All features and its datatypes:</p>", unsafe_allow_html=True)
+        st.write(col_info_list, list_objects=True)
+        
+    with tab2:
+        # Define function to generate report
+        def generate_report():
+            report = ProfileReport(df)
+            st_profile_report(report)
 
-# - Job level is strongly correlated with total working yyears
-# - Monthly income is strongly correlated with Job level
-# - Monthly income is strongly correlated with total working years
-# - Age is stongly correlated with monthly income
-# - Performance Rating is strongly correlated with Salary Hike
-# - Department is strongly correlated with Job Role
-
+        # Add button to generate report
+        if st.button("Generate Report"):
+            report_html = generate_report()
+            # Embed report HTML code in iframe
+            report_iframe = f'<iframe srcdoc="{report_html}" width=1000 height=600></iframe>'
+            # Display iframe in new page
+            html(report_iframe, scrolling=True)
 
 df['Attrition'] = df['Attrition'].apply(lambda x:1 if x == "Yes" else 0 )
 df['OverTime'] = df['OverTime'].apply(lambda x:1 if x =="Yes" else 0 )
 
 attrition = df[df['Attrition'] == 1]
 no_attrition = df[df['Attrition']==0]
+
+
+with st.expander("Correlation between Variables"):
+    st.image("correlation.png")
+    st.markdown("<p style='text-align: justify; color: black; font-size: 15px;'><i>Correlation Findings:</i></p>", unsafe_allow_html=True)
+    st.markdown("* Job level is strongly correlated with total working years")
+    st.markdown("* Monthly income is strongly correlated with Job level")
+    st.markdown("* Monthly income is strongly correlated with total working years")
+    st.markdown("* Performance Rating is strongly correlated with Salary Hike")
+    st.markdown("* Department is strongly correlated with Job Role")
+    st.markdown("<br/>", unsafe_allow_html=True)
 
 
 def categorical_variable_viz(categ_var_name):
@@ -253,9 +305,10 @@ def exec_ml_algorithm(algo, X_train,y_train, cv):
 
     return train_pred, acc, acc_cv
 
-with st.expander("Model Comparison and Selection"):
+with st.expander("Model Comparison"):
     col1, col2 = st.columns([4,4])
     with col1:
+        st.markdown("<br/>", unsafe_allow_html=True)
         algo = st.selectbox('Select the Algorithm', [LogisticRegression(), SVC(),LinearSVC(),KNeighborsClassifier(n_neighbors = 3),DecisionTreeClassifier(),RandomForestClassifier(n_estimators=100)])
 
     
