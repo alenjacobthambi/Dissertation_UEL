@@ -91,10 +91,6 @@ with st.expander("Dataset Overview"):
         # Add button to generate report
         if st.button("Generate Report"):
             report_html = generate_report()
-            # Embed report HTML code in iframe
-            report_iframe = f'<iframe srcdoc="{report_html}" width=1000 height=600></iframe>'
-            # Display iframe in new page
-            html(report_iframe, scrolling=True)
 
 df['Attrition'] = df['Attrition'].apply(lambda x:1 if x == "Yes" else 0 )
 df['OverTime'] = df['OverTime'].apply(lambda x:1 if x =="Yes" else 0 )
