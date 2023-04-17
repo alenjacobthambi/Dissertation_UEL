@@ -1,14 +1,11 @@
-# data analysis and wrangling
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot
 import pickle
 from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv (
-    "Employee_Attrition.csv")
+df = pd.read_csv ("Employee_Attrition.csv")
 
 # drop the unnecessary columns
 df.drop (['EmployeeNumber','Over18','StandardHours','EmployeeCount'],axis=1,inplace=True)
@@ -106,24 +103,16 @@ X_numerical.drop ('Attrition',axis=1,inplace=True)
 
 y = df['Attrition']
 
-# One HOt Encoding Categorical Features
-onehotencoder = OneHotEncoder ()
-
-#X_categorical = onehotencoder.fit_transform (X_categorical).toarray ()
-#X_categorical = pd.DataFrame (X_categorical)
-#X_categorical
-
+# Doing factozation for the categorical variables
 X_categorical = pd.get_dummies(X_categorical)
 
 # concat the categorical and numerical values
 
 X_all = pd.concat ([X_categorical,X_numerical,X_other],axis=1)
-X_all.head ()
 X_all.columns = X_all.columns.astype(str)
 
 # Split Test and Train Data
-
-X_train,X_test,y_train,y_test = train_test_split (X_all,y,test_size=0.20)
+X_train,X_test,y_train,y_test = train_test_split (X_all,y,test_size=0.30)
 
 # Function that runs the requested algorithm and returns the accuracy metrics
 
