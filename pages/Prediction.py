@@ -6,6 +6,9 @@ import streamlit as st
 
 st.set_page_config(page_title="Prediction", page_icon="📈",layout="wide")
 
+with open("model.py") as f:
+    exec(f.read())
+
 model = pickle.load (open ('model.pkl','rb'))
 
 model_features = model.feature_names_in_
@@ -366,7 +369,7 @@ with st.form("attrition_form"):
 
     # df.to_csv ('features.csv',index=False)
 
-    prediction = model.predict (df[model_features])
+    prediction = model.predict(df[model_features])
 
     if submitted:
         if prediction == 0:
