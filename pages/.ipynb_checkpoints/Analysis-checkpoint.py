@@ -314,6 +314,6 @@ with st.expander("Model Comparison"):
     log_time = round((time.time() - start_time),5)
     col1, col2, col3 = st.columns(3)
     with st.spinner('Loading...'):
-        col1.metric("Accuracy", str(acc_log), "")
-        col2.metric("Accuracy CV 10-Fold", str(acc_cv_log), "")
+        col1.metric("Model Score", str(acc_log), "")
+        col2.metric("Cross Validation Accuracy", str(acc_cv_log), "")
         col3.metric("Running Time", str(log_time), "")
