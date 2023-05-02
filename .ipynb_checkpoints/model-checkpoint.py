@@ -22,7 +22,7 @@ df['Total_Satisfaction'] = (df['EnvironmentSatisfaction'] +
                             df['RelationshipSatisfaction'] +
                             df['WorkLifeBalance']) / 5
 
-# Drop Columns
+# Drop Satisfaction Columns
 df.drop (['EnvironmentSatisfaction','JobInvolvement','JobSatisfaction','RelationshipSatisfaction','WorkLifeBalance'],
          axis=1,inplace=True)
 
@@ -115,7 +115,6 @@ X_all.columns = X_all.columns.astype(str)
 X_train,X_test,y_train,y_test = train_test_split (X_all,y,test_size=0.30)
 
 # Function that runs the requested algorithm and returns the accuracy metrics
-
 regressor = LogisticRegression ()
 regressor.fit (X_train,y_train)
 

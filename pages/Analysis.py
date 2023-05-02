@@ -30,7 +30,7 @@ from sklearn.tree import DecisionTreeClassifier
 import warnings
 warnings.filterwarnings('ignore')
 
-st.markdown("<h2 style='text-align: center; color: Black;'>Exploratory Data Analysis</h1><br/>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: Black;'>Exploratory Data Analysis & Modelling</h1><br/>", unsafe_allow_html=True)
 
 df = pd.read_csv("Employee_Attrition.csv")
 
@@ -317,3 +317,16 @@ with st.expander("Model Comparison"):
         col1.metric("Model Score", str(acc_log), "")
         col2.metric("Cross Validation Accuracy", str(acc_cv_log), "")
         col3.metric("Running Time", str(log_time), "")
+
+with st.expander("ROC Curve"):
+    st.image("roc_curve.png")
+
+with st.expander("Prediction Matrix"):
+    st.image("prediction_metrics.png")
+    
+with st.expander("Feature Importance"):
+    col1, col2 = st.columns([4,4])
+    with col1:
+        st.image("lg_feature_importance.png")
+    with col2:
+        st.image("lsvc_feature_importance.png")        
