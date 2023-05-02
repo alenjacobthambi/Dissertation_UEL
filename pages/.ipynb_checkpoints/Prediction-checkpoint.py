@@ -368,7 +368,6 @@ with st.form("attrition_form"):
     
 
     # df.to_csv ('features.csv',index=False)
-
     prediction = model.predict(df[model_features])
 
     if submitted:
