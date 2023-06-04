@@ -43,7 +43,8 @@ with st.expander("Dataset Overview"):
     with tab1:
         # Data source and description
         st.markdown("<h6 style='text-align: left; color: Black;'>Data Source</h6>", unsafe_allow_html=True)
-        st.write("<p style='text-align: justify; color: Black;'>The data used in my analysis on employee attrition was obtained from Kaggle, a well-known platform for data science competitions, datasets, and more. Kaggle offers a wide range of datasets on various topics, and this particular dataset provides information on employee attrition in a company. With this data, I aim to analyze the factors that contribute to employee attrition and build a model to predict which employees are most likely to leave the company. For more information about Kaggle and the resources it offers for data science enthusiasts, visit https://www.kaggle.com/.</p><br/>", unsafe_allow_html=True)
+        st.write("<p style='text-align: justify; color: Black;'>The data used in my analysis on employee attrition was obtained from Kaggle, a well-known platform for data science competitions, datasets, and more.  Kaggle offers a wide range of datasets on various topics, and this particular dataset provides information on employee attrition in a company. With this data, I aim to analyze the factors that contribute to employee attrition and build a model to predict which employees are most likely to leave the company. For more information about Kaggle and the resources it offers for data science enthusiasts, visit https://www.kaggle.com/.</p><br/>", unsafe_allow_html=True)
+        
         # Basic statistics
         st.markdown("<h6 style='text-align: left; color: Black;'>About Data and Features</h6>", unsafe_allow_html=True)
         col1, col2 = st.columns([1,1])
