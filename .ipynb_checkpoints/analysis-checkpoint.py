@@ -529,6 +529,44 @@ print(xgb_pred)
 lgb_pred = ml_algorithm_pred_exec(lgb.LGBMClassifier(boosting_type='gbdt', num_leaves=31, max_depth=-1, learning_rate=0.1, n_estimators=50),X_train, y_train,10)
 print(lgb_pred)
 
+# Model Ensembling
+lr1 = LogisticRegression()
+lr2 = LogisticRegression(random_state=42, C=0.1)
+lr3 = LogisticRegression(random_state=42, C=0.2)
+lr4 = LogisticRegression(random_state=50, C=0.3)
+svm1 = LinearSVC()
+svm2 = LinearSVC(random_state=42, C=0.1)
+svm3 = LinearSVC(random_state=42, C=0.2)
+svm4 = LinearSVC(random_state=50, C=0.3)
+
+voting = VotingClassifier(estimators=[
+    ('lr1', lr1),
+    ('lr2', lr2),
+    ('lr3', lr3),
+    ('lr4', lr4),
+    ('svm1', svm1),
+    ('svm2', svm2),
+    ('svm3', svm3),
+    ('svm4', svm4)
+], voting='hard')
+
+voting.fit(X_train, y_train)
+
+y_pred = voting.predict(X_test)
+acc = metrics.accuracy_score(y_test, y_pred)
+prec = metrics.precision_score(y_test, y_pred)
+recall = metrics.recall_score(y_test, y_pred)
+f1 = metrics.f1_score(y_test, y_pred)
+cm = metrics.confusion_matrix(y_test, y_pred)
+
+print('Voting Ensemble Results:')
+print('Accuracy: {:.2f}'.format(acc))
+print('Precision: {:.2f}'.format(prec))
+print('Recall: {:.2f}'.format(recall))
+print('F1-Score: {:.2f}'.format(f1))
+print('Confusion Matrix:\n', cm)
+
+
 # Logistic Regression feature Importance
 importance = LogisticRegression().fit(X_train, y_train).coef_[0]
 
